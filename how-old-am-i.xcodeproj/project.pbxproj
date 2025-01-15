@@ -19,7 +19,7 @@
 		D86DF2852D37EBB600141B3E /* Exceptions for "how-old-am-i" folder in "how-old-am-i" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resources/Info.plist,
 			);
 			target = D86DF2722D37EBB400141B3E /* how-old-am-i */;
 		};
@@ -154,7 +154,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4H44S5YAWR;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "how-old-am-i/Info.plist";
+				INFOPLIST_FILE = "how-old-am-i/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -185,7 +185,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4H44S5YAWR;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "how-old-am-i/Info.plist";
+				INFOPLIST_FILE = "how-old-am-i/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

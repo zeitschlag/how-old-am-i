@@ -3,7 +3,7 @@
 - Enter your name and have your age guessed
 - Interview challenge
 - Uses the [agify-API][agify-api]
-- Written in Swift using classic MVC+Coordinator and UIKit, UI in code, no storyboards.
+- Written in Swift using classic Apple-MVC+Coordinator and UIKit, UI in code, no storyboards.
 
 ## How to build
 
