@@ -1,21 +1,45 @@
 import UIKit
 
-class AppCoordinator: Coordinator {
+class AppCoordinator: NSObject, Coordinator {
 
     let window: UIWindow
-    let viewController: GuessAgeViewController
+    let pageViewController: UIPageViewController
+    let guessAgeViewController: GuessAgeViewController
+    let historyViewController: AgeGuessingHistoryViewController
     let apiClient: APIClient
 
     init(window: UIWindow, apiClient: APIClient = APIClient()) {
         self.window = window
-        self.viewController = GuessAgeViewController()
+        self.guessAgeViewController = GuessAgeViewController()
+        self.historyViewController = AgeGuessingHistoryViewController()
+        self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         self.apiClient = apiClient
     }
 
     func start() {
-        viewController.delegate = self
-        window.rootViewController = viewController
+        pageViewController.setViewControllers([guessAgeViewController], direction: .forward, animated: false)
+        pageViewController.dataSource = self
+        guessAgeViewController.delegate = self
+        window.rootViewController = pageViewController
         window.makeKeyAndVisible()
+    }
+}
+
+extension AppCoordinator: UIPageViewControllerDataSource {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        if viewController == guessAgeViewController {
+            return historyViewController
+        } else {
+            return nil
+        }
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        if viewController == historyViewController {
+            return guessAgeViewController
+        } else {
+            return nil
+        }
     }
 }
 
