@@ -41,11 +41,12 @@ class ViewController: UIViewController {
         contentView.nameTextfield.isEnabled = false
         contentView.guessAgeButton.isEnabled = false
         contentView.guessAgeButton.configuration?.showsActivityIndicator = true
+        contentView.resultsLabel.text = ""
         delegate?.guessAge(self, for: name)
     }
 
     @objc func textChanged(_ textField: UITextField) {
-        guard let text = textField.text else { return }
+        guard let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
 
         let buttonEnabled = text.isEmpty == false
         contentView.guessAgeButton.isEnabled = buttonEnabled
@@ -55,8 +56,8 @@ class ViewController: UIViewController {
         contentView.guessAgeButton.configuration?.showsActivityIndicator = false
         contentView.nameTextfield.isEnabled = true
         contentView.nameTextfield.text = ""
-
-        contentView.resultsLabel.text = "You are \(estimation.age) years old, right?!"
+        contentView.nameTextfield.becomeFirstResponder()
+        contentView.resultsLabel.text = estimation.displayString
     }
 
     func update(with error: Error) {
@@ -86,5 +87,33 @@ class ViewController: UIViewController {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
+    }
+}
+
+extension AgeEstimation {
+    var displayString: String {
+
+        let string: String
+
+        switch age {
+        case _ where age < 0:
+            string = "Well, congratulations to your parents in the near future."
+        case 0..<1:
+            string = "🐣🐣🐣🐣🐣"
+        case 1..<6:
+            string = "Hello, \(age) years-old little 👶👧🧒👦"
+        case 6..<16:
+            string = "Aren't you supposed to be in school at the age of \(age)"
+        case 16..<65:
+            string = "Your name is \(name) and you're \(age) years old and please get back to work. Now!"
+        case 65...120:
+            string = "Yo fellow \(age) years old kid 🧢" // Try Ferdinand
+        case _ where age > 120:
+            string = "Wait you still alive?!? 🧟🧟🧟"
+        default:
+            string = "\(name) is \(age) years old!"
+        }
+
+        return string
     }
 }

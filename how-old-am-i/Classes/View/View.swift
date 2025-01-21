@@ -19,9 +19,15 @@ class View: UIView {
         buttonConfiguration.cornerStyle = .capsule
         buttonConfiguration.baseBackgroundColor = .systemBlue
         guessAgeButton = UIButton(configuration: buttonConfiguration)
-        guessAgeButton.isEnabled = false
         guessAgeButton.translatesAutoresizingMaskIntoConstraints = false
+        guessAgeButton.isEnabled = false
+
         resultsLabel = UILabel()
+        resultsLabel.translatesAutoresizingMaskIntoConstraints = false
+        resultsLabel.numberOfLines = 0
+        resultsLabel.textAlignment = .center
+        resultsLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        resultsLabel.adjustsFontForContentSizeCategory = true
 
         contentStackView = UIStackView(arrangedSubviews: [resultsLabel, nameTextfield, guessAgeButton])
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -42,8 +48,8 @@ class View: UIView {
     private func setupConstraints() {
         let bottomConstraint = safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor)
         let constraints = [
-            contentStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor, constant: 16),
             bottomConstraint,
 
             guessAgeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 40),
