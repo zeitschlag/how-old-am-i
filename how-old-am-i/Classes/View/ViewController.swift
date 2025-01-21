@@ -11,6 +11,9 @@ class ViewController: UIViewController {
 
     init() {
         super.init(nibName: nil, bundle: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -38,7 +41,6 @@ class ViewController: UIViewController {
         contentView.nameTextfield.isEnabled = false
         contentView.guessAgeButton.isEnabled = false
         contentView.guessAgeButton.configuration?.showsActivityIndicator = true
-        contentView.guessAgeButton.configuration?.title = ""
         delegate?.guessAge(self, for: name)
     }
 
@@ -51,8 +53,6 @@ class ViewController: UIViewController {
 
     func update(with estimation: AgeEstimation) {
         contentView.guessAgeButton.configuration?.showsActivityIndicator = false
-        contentView.guessAgeButton.configuration?.title = "Guess my age!"
-        contentView.guessAgeButton.isEnabled = true
         contentView.nameTextfield.isEnabled = true
         contentView.nameTextfield.text = ""
 
@@ -62,9 +62,29 @@ class ViewController: UIViewController {
     func update(with error: Error) {
         contentView.guessAgeButton.configuration?.showsActivityIndicator = false
         contentView.guessAgeButton.configuration?.title = "Guess my age!"
-        contentView.guessAgeButton.isEnabled = true
         contentView.nameTextfield.isEnabled = true
 
         contentView.resultsLabel.text = error.localizedDescription
+    }
+
+    // MARK: - Notifications
+    @objc private func keyboardDidShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              var keyboardFrame: CGRect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+
+        keyboardFrame = view.convert(keyboardFrame, from: nil)
+        contentView.bottomConstraint?.constant = keyboardFrame.size.height + 20
+        UIView.animate(withDuration: 0.5) {
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        contentView.bottomConstraint?.constant = 0
+        UIView.animate(withDuration: 0.5) {
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+        }
     }
 }
