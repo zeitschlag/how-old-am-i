@@ -3,12 +3,12 @@ import UIKit
 class AppCoordinator: Coordinator {
 
     let window: UIWindow
-    let viewController: ViewController
+    let viewController: GuessAgeViewController
     let apiClient: APIClient
 
     init(window: UIWindow, apiClient: APIClient = APIClient()) {
         self.window = window
-        self.viewController = ViewController()
+        self.viewController = GuessAgeViewController()
         self.apiClient = apiClient
     }
 
@@ -19,8 +19,8 @@ class AppCoordinator: Coordinator {
     }
 }
 
-extension AppCoordinator: ViewControllerDelegate {
-    func guessAge(_ viewController: ViewController, for name: String) {
+extension AppCoordinator: GuessAgeViewControllerDelegate {
+    func guessAge(_ viewController: GuessAgeViewController, for name: String) {
         Task {
             try await Task.sleep(for: .seconds(5))
             do {

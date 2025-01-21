@@ -1,6 +1,6 @@
 import UIKit
 
-class View: UIView {
+class GuessAgeView: UIView {
 
     //TODO: Add ScrollView for Keyboard Show/Hide
     private let contentStackView: UIStackView

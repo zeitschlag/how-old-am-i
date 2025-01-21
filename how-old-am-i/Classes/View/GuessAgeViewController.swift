@@ -1,27 +1,27 @@
 import UIKit
 
-protocol ViewControllerDelegate: AnyObject {
-    func guessAge(_ viewController: ViewController, for name: String)
+protocol GuessAgeViewControllerDelegate: AnyObject {
+    func guessAge(_ viewController: GuessAgeViewController, for name: String)
 }
 
-class ViewController: UIViewController {
+class GuessAgeViewController: UIViewController {
 
-    weak var delegate: ViewControllerDelegate?
-    var contentView: View { view as! View }
+    weak var delegate: GuessAgeViewControllerDelegate?
+    var contentView: GuessAgeView { view as! GuessAgeView }
 
     init() {
         super.init(nibName: nil, bundle: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GuessAgeViewController.keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(GuessAgeViewController.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     override func loadView() {
-        let view = View()
-        view.guessAgeButton.addTarget(self, action: #selector(ViewController.guessAge(_:)), for: .touchUpInside)
-        view.nameTextfield.addTarget(self, action: #selector(ViewController.textChanged(_:)), for: .editingChanged)
+        let view = GuessAgeView()
+        view.guessAgeButton.addTarget(self, action: #selector(GuessAgeViewController.guessAge(_:)), for: .touchUpInside)
+        view.nameTextfield.addTarget(self, action: #selector(GuessAgeViewController.textChanged(_:)), for: .editingChanged)
         self.view = view
     }
 
