@@ -1,21 +1,48 @@
 import UIKit
 
-class AppCoordinator: Coordinator {
+class AppCoordinator: NSObject, Coordinator {
 
     let window: UIWindow
-    let viewController: GuessAgeViewController
+    let pageViewController: UIPageViewController
+    let guessAgeViewController: GuessAgeViewController
+    let historyViewController: AgeGuessingHistoryViewController
     let apiClient: APIClient
+    let store: AgeEstimationStore
 
-    init(window: UIWindow, apiClient: APIClient = APIClient()) {
+    init(window: UIWindow, apiClient: APIClient = APIClient(), store: AgeEstimationStore = AgeEstimationStore()) {
         self.window = window
-        self.viewController = GuessAgeViewController()
+        self.guessAgeViewController = GuessAgeViewController()
         self.apiClient = apiClient
+        self.store = store
+        self.historyViewController = AgeGuessingHistoryViewController(history: store.history)
+        self.pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
+
     }
 
     func start() {
-        viewController.delegate = self
-        window.rootViewController = viewController
+        pageViewController.setViewControllers([guessAgeViewController], direction: .forward, animated: false)
+        pageViewController.dataSource = self
+        guessAgeViewController.delegate = self
+        window.rootViewController = pageViewController
         window.makeKeyAndVisible()
+    }
+}
+
+extension AppCoordinator: UIPageViewControllerDataSource {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        if viewController == guessAgeViewController {
+            return historyViewController
+        } else {
+            return nil
+        }
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        if viewController == historyViewController {
+            return guessAgeViewController
+        } else {
+            return nil
+        }
     }
 }
 
@@ -25,7 +52,9 @@ extension AppCoordinator: GuessAgeViewControllerDelegate {
             try await Task.sleep(for: .seconds(5))
             do {
                 let estimation = try await apiClient.getAgeEstimation(for: name)
+                store.add(estimation)
                 await MainActor.run {
+                    historyViewController.update(newHistory: store.history)
                     viewController.update(with: estimation)
                 }
             } catch {
