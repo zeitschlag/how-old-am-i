@@ -48,13 +48,18 @@ extension AppCoordinator: UIPageViewControllerDataSource {
 
 extension AppCoordinator: GuessAgeViewControllerDelegate {
     func guessAge(_ viewController: GuessAgeViewController, for name: String) {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
+
+            #if DEBUG
             try await Task.sleep(for: .seconds(5))
+            #endif
+
             do {
-                let estimation = try await apiClient.getAgeEstimation(for: name)
-                store.add(estimation)
+                let estimation = try await self.apiClient.getAgeEstimation(for: name)
+                self.store.add(estimation)
                 await MainActor.run {
-                    historyViewController.update(newHistory: store.history)
+                    self.historyViewController.update(newHistory: self.store.history)
                     viewController.update(with: estimation)
                 }
             } catch {

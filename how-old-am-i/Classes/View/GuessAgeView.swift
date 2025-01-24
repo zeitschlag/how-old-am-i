@@ -8,6 +8,7 @@ class GuessAgeView: UIView {
     let guessAgeButton: UIButton
     let resultsLabel: UILabel
     var bottomConstraint: NSLayoutConstraint? = nil
+    private let margin = 16.0
 
     init() {
         nameTextfield = UITextField()
@@ -32,7 +33,7 @@ class GuessAgeView: UIView {
         contentStackView = UIStackView(arrangedSubviews: [resultsLabel, nameTextfield, guessAgeButton])
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
         contentStackView.axis = .vertical
-        contentStackView.spacing = 16
+        contentStackView.spacing = margin
         contentStackView.alignment = .center
 
         super.init(frame: .zero)
@@ -48,11 +49,12 @@ class GuessAgeView: UIView {
     private func setupConstraints() {
         let bottomConstraint = safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor)
         let constraints = [
-            contentStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor, constant: 16),
+            contentStackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: margin),
+            safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor, constant: margin),
             bottomConstraint,
 
             guessAgeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 40),
+            resultsLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 500)
         ]
 
         NSLayoutConstraint.activate(constraints)

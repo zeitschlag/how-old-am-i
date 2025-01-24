@@ -74,18 +74,19 @@ class GuessAgeViewController: UIViewController {
               var keyboardFrame: CGRect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
 
         keyboardFrame = view.convert(keyboardFrame, from: nil)
-        contentView.bottomConstraint?.constant = keyboardFrame.size.height + 20
-        UIView.animate(withDuration: 0.5) {
-            self.view.setNeedsLayout()
-            self.view.layoutIfNeeded()
+        let bottomMarginConstant = 20.0
+        contentView.bottomConstraint?.constant = keyboardFrame.size.height + bottomMarginConstant
+        UIView.animate(withDuration: 0.5) { [weak self] in
+            self?.view.setNeedsLayout()
+            self?.view.layoutIfNeeded()
         }
     }
 
     @objc private func keyboardWillHide(_ notification: Notification) {
         contentView.bottomConstraint?.constant = 0
-        UIView.animate(withDuration: 0.5) {
-            self.view.setNeedsLayout()
-            self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.5) { [weak self] in
+            self?.view.setNeedsLayout()
+            self?.view.layoutIfNeeded()
         }
     }
 }
@@ -96,9 +97,9 @@ extension AgeEstimation {
         let string: String
 
         switch age {
-        case _ where age < 0:
+        case ...0:
             string = "Well, congratulations to your parents in the near future."
-        case 0..<1:
+        case 0:
             string = "🐣🐣🐣🐣🐣"
         case 1..<6:
             string = "Hello, \(age) years-old little 👶👧🧒👦"
@@ -108,7 +109,7 @@ extension AgeEstimation {
             string = "Your name is \(name) and you're \(age) years old and please get back to work. Now!"
         case 65...120:
             string = "Yo fellow \(age) years old kid 🧢" // Try Ferdinand
-        case _ where age > 120:
+        case 120...:
             string = "Wait you still alive?!? 🧟🧟🧟"
         default:
             string = "\(name) is \(age) years old!"
